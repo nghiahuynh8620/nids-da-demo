@@ -1,14 +1,1 @@
-pandas==2.2.2
-numpy==1.26.4
-scipy==1.11.4
-scikit-learn==1.4.2
-matplotlib==3.8.4
-seaborn==0.13.2
-joblib==1.4.2
-tensorflow==2.15.0
-keras==2.15.0
-adversarial-robustness-toolbox==1.18.0
-pyarrow==17.0.0
-jupyter==1.1.1
-nbformat==5.10.4
-ipykernel==6.29.5
+keras
