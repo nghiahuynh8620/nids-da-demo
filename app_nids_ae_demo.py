@@ -85,14 +85,32 @@ def _load_model_direct(model_path: str):
     return tf.keras.models.load_model(model_path, **kwargs)
 
 
-def _extract_weights_from_keras_archive(model_path: str) -> str:
+def _extract_archive_members(model_path: str) -> tuple[str, Optional[str]]:
     tmpdir = tempfile.mkdtemp(prefix="keras_extract_")
+    config_path = None
     with zipfile.ZipFile(model_path, "r") as zf:
         names = set(zf.namelist())
         if "model.weights.h5" not in names:
             raise RuntimeError("File .keras không chứa model.weights.h5.")
         zf.extract("model.weights.h5", path=tmpdir)
-    return str(Path(tmpdir) / "model.weights.h5")
+        if "config.json" in names:
+            zf.extract("config.json", path=tmpdir)
+            config_path = str(Path(tmpdir) / "config.json")
+    return str(Path(tmpdir) / "model.weights.h5"), config_path
+
+
+def _build_model_from_keras_config(config_path: str):
+    with open(config_path, "r", encoding="utf-8") as f:
+        raw = f.read()
+    try:
+        return tf.keras.models.model_from_json(raw)
+    except Exception:
+        cfg = json.loads(raw)
+        if isinstance(cfg, dict) and "config" in cfg and isinstance(cfg["config"], dict):
+            inner = cfg["config"]
+            if "layers" in inner:
+                return tf.keras.Sequential.from_config(inner)
+        raise
 
 
 def _peek_keras_metadata(model_path: str) -> dict:
@@ -120,7 +138,14 @@ def load_keras_model(model_path: str, kind: str, dataset_name: str, input_dim: i
 
     if path_obj.suffix.lower() == ".keras":
         try:
-            weights_path = _extract_weights_from_keras_archive(model_path)
+            weights_path, config_path = _extract_archive_members(model_path)
+            if config_path:
+                try:
+                    model = _build_model_from_keras_config(config_path)
+                    model.load_weights(weights_path)
+                    return model
+                except Exception as e:
+                    errors.append(f"rebuild từ config.json + load_weights thất bại: {e}")
             model = build_classifier_fallback(input_dim) if kind == "classifier" else build_dae_fallback(dataset_name, input_dim)
             model.load_weights(weights_path)
             return model
