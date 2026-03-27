@@ -1,0 +1,13 @@
+{
+  "dataset": "UNSW-NB15",
+  "attack": "DeepFool",
+  "n_attack_input": 1227,
+  "n_adv_raw": 1227,
+  "n_adv_success": 1041,
+  "success_rate_to_benign": 0.8484107579462102,
+  "mean_abs_delta": 0.24126578867435455,
+  "max_abs_delta": 1.0,
+  "changed_feature_ratio": 0.6076921743050859,
+  "attack_batch_size": 32,
+  "predict_batch_size": 32
+}

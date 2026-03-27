@@ -1,0 +1,13 @@
+{
+  "dataset": "NSL-KDD",
+  "attack": "JSMA",
+  "n_attack_input": 13778,
+  "n_adv_raw": 13778,
+  "n_adv_success": 13778,
+  "success_rate_to_benign": 1.0,
+  "mean_abs_delta": 0.029950298368930817,
+  "max_abs_delta": 1.0,
+  "changed_feature_ratio": 0.047669272321276907,
+  "attack_batch_size": 32,
+  "predict_batch_size": 32
+}

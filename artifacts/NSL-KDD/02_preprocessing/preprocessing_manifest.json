@@ -1,0 +1,76 @@
+{
+  "dataset": "NSL-KDD",
+  "selector_k": 47,
+  "clean_info": {
+    "input_rows": 113269,
+    "input_cols": 41,
+    "post_dummy_cols": 117,
+    "n_shifted_cols_for_chi2": 0
+  },
+  "selected_feature_names": [
+    "duration",
+    "src_bytes",
+    "dst_bytes",
+    "wrong_fragment",
+    "hot",
+    "logged_in",
+    "num_compromised",
+    "num_root",
+    "num_file_creations",
+    "count",
+    "srv_count",
+    "serror_rate",
+    "srv_serror_rate",
+    "rerror_rate",
+    "srv_rerror_rate",
+    "same_srv_rate",
+    "srv_diff_host_rate",
+    "dst_host_count",
+    "dst_host_srv_count",
+    "dst_host_same_srv_rate",
+    "dst_host_same_src_port_rate",
+    "dst_host_srv_diff_host_rate",
+    "dst_host_serror_rate",
+    "dst_host_srv_serror_rate",
+    "dst_host_rerror_rate",
+    "dst_host_srv_rerror_rate",
+    "protocol_type_icmp",
+    "protocol_type_udp",
+    "service_Z39_50",
+    "service_bgp",
+    "service_courier",
+    "service_domain_u",
+    "service_ecr_i",
+    "service_ftp_data",
+    "service_http",
+    "service_iso_tsap",
+    "service_other",
+    "service_private",
+    "service_smtp",
+    "service_telnet",
+    "service_uucp",
+    "service_uucp_path",
+    "service_whois",
+    "flag_REJ",
+    "flag_RSTO",
+    "flag_S0",
+    "flag_SF"
+  ],
+  "selected_feature_count": 47,
+  "X_all_shape": [
+    113269,
+    47
+  ],
+  "X_train_shape": [
+    79288,
+    47
+  ],
+  "X_test_shape": [
+    33981,
+    47
+  ],
+  "y_distribution_all": {
+    "benign": 67342,
+    "attack": 45927
+  }
+}

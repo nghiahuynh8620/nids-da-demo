@@ -1,0 +1,13 @@
+{
+  "dataset": "NSL-KDD",
+  "attack": "DeepFool",
+  "n_attack_input": 13778,
+  "n_adv_raw": 13778,
+  "n_adv_success": 13635,
+  "success_rate_to_benign": 0.9896211351429816,
+  "mean_abs_delta": 0.4120003283023834,
+  "max_abs_delta": 1.0,
+  "changed_feature_ratio": 0.5673537523588329,
+  "attack_batch_size": 32,
+  "predict_batch_size": 32
+}

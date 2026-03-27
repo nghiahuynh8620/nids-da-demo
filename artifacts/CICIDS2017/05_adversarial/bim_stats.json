@@ -1,0 +1,13 @@
+{
+  "dataset": "CICIDS2017",
+  "attack": "BIM",
+  "n_attack_input": 38408,
+  "n_adv_raw": 38408,
+  "n_adv_success": 8,
+  "success_rate_to_benign": 0.00020828993959591752,
+  "mean_abs_delta": 0.018656441941857338,
+  "max_abs_delta": 0.6000000238418579,
+  "changed_feature_ratio": 0.13294603961054213,
+  "attack_batch_size": 32,
+  "predict_batch_size": 32
+}

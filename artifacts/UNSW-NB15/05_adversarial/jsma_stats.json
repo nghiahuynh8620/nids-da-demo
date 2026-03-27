@@ -1,0 +1,13 @@
+{
+  "dataset": "UNSW-NB15",
+  "attack": "JSMA",
+  "n_attack_input": 1227,
+  "n_adv_raw": 1227,
+  "n_adv_success": 1227,
+  "success_rate_to_benign": 1.0,
+  "mean_abs_delta": 0.0167611725628376,
+  "max_abs_delta": 0.9000000357627869,
+  "changed_feature_ratio": 0.0397093759212055,
+  "attack_batch_size": 32,
+  "predict_batch_size": 32
+}

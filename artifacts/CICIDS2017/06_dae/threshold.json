@@ -1,0 +1,7 @@
+{
+  "dataset": "CICIDS2017",
+  "threshold_metric": "source_mse",
+  "threshold": 0.011148776859045029,
+  "n_non_functional_features": 7,
+  "paper_threshold_reference": 4.13e-05
+}

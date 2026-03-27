@@ -1,0 +1,7 @@
+{
+  "dataset": "UNSW-NB15",
+  "threshold_metric": "source_mse",
+  "threshold": 0.019035935401916504,
+  "n_non_functional_features": 24,
+  "paper_threshold_reference": 0.0025
+}

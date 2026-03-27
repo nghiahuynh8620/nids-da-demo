@@ -1,0 +1,13 @@
+{
+  "dataset": "NSL-KDD",
+  "attack": "BIM",
+  "n_attack_input": 13778,
+  "n_adv_raw": 13778,
+  "n_adv_success": 0,
+  "success_rate_to_benign": 0.0,
+  "mean_abs_delta": 0.055123262107372284,
+  "max_abs_delta": 0.6000000238418579,
+  "changed_feature_ratio": 0.11541371844723164,
+  "attack_batch_size": 32,
+  "predict_batch_size": 32
+}

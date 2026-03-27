@@ -1,0 +1,13 @@
+{
+  "dataset": "CICIDS2017",
+  "attack": "DeepFool",
+  "n_attack_input": 38408,
+  "n_adv_raw": 38408,
+  "n_adv_success": 31110,
+  "success_rate_to_benign": 0.8099875026036243,
+  "mean_abs_delta": 0.27662399411201477,
+  "max_abs_delta": 1.0,
+  "changed_feature_ratio": 0.8484807021586814,
+  "attack_batch_size": 32,
+  "predict_batch_size": 32
+}

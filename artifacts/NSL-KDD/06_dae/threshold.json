@@ -1,0 +1,7 @@
+{
+  "dataset": "NSL-KDD",
+  "threshold_metric": "source_mse",
+  "threshold": 0.030550912022590637,
+  "n_non_functional_features": 14,
+  "paper_threshold_reference": 0.00109
+}

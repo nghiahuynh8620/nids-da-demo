@@ -1,0 +1,76 @@
+{
+  "dataset": "UNSW-NB15",
+  "selector_k": 47,
+  "clean_info": {
+    "input_rows": 41089,
+    "input_cols": 43,
+    "post_dummy_cols": 193,
+    "n_shifted_cols_for_chi2": 0
+  },
+  "selected_feature_names": [
+    "id",
+    "dur",
+    "spkts",
+    "dpkts",
+    "sbytes",
+    "dbytes",
+    "rate",
+    "sttl",
+    "dttl",
+    "sload",
+    "dload",
+    "sloss",
+    "dloss",
+    "sinpkt",
+    "dinpkt",
+    "sjit",
+    "djit",
+    "swin",
+    "stcpb",
+    "dtcpb",
+    "dwin",
+    "dmean",
+    "response_body_len",
+    "ct_srv_src",
+    "ct_state_ttl",
+    "ct_dst_ltm",
+    "ct_src_dport_ltm",
+    "ct_dst_sport_ltm",
+    "ct_dst_src_ltm",
+    "ct_srv_dst",
+    "proto_any",
+    "proto_arp",
+    "proto_gre",
+    "proto_ipv6",
+    "proto_ospf",
+    "proto_rsvp",
+    "proto_sctp",
+    "proto_sep",
+    "proto_swipe",
+    "proto_tcp",
+    "proto_udp",
+    "proto_unas",
+    "state_CON",
+    "state_FIN",
+    "state_INT",
+    "service_dns",
+    "service_pop3"
+  ],
+  "selected_feature_count": 47,
+  "X_all_shape": [
+    41089,
+    47
+  ],
+  "X_train_shape": [
+    28762,
+    47
+  ],
+  "X_test_shape": [
+    12327,
+    47
+  ],
+  "y_distribution_all": {
+    "benign": 37000,
+    "attack": 4089
+  }
+}
