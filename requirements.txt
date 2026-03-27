@@ -1,6 +1,7 @@
-streamlit==1.49.0
-tensorflow-cpu==2.15.1
+streamlit==1.39.0
+tensorflow-cpu==2.15.0
 numpy==1.26.4
-pandas==2.2.3
-h5py==3.11.0
-packaging>=23,<26
+pandas==2.2.2
+h5py==3.10.0
+protobuf==4.25.3
+ml-dtypes==0.2.0
