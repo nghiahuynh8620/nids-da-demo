@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import tempfile
+import zipfile
 from pathlib import Path
 from typing import Optional, Tuple
 
@@ -31,9 +33,73 @@ def safe_load_json(path: Path) -> dict:
         return json.load(f)
 
 
+def build_classifier_fallback(input_dim: int) -> tf.keras.Model:
+    tf.keras.backend.clear_session()
+    model = tf.keras.Sequential([
+        tf.keras.layers.Input(shape=(input_dim,)),
+        tf.keras.layers.Dense(25, activation='relu'),
+        tf.keras.layers.Dense(13, activation='relu'),
+        tf.keras.layers.Dense(2, activation='softmax'),
+    ])
+    return model
+
+
+def build_dae_fallback(dataset_name: str, input_dim: int) -> tf.keras.Model:
+    tf.keras.backend.clear_session()
+    ds = dataset_name.upper()
+    if 'NSL' in ds and input_dim == 24:
+        hidden = [20, 15, 8, 15, 20]
+    elif 'UNSW' in ds and input_dim == 29:
+        hidden = [15, 8, 15]
+    elif 'CIC' in ds and input_dim == 10:
+        hidden = [9, 8, 5, 8, 9]
+    else:
+        bottleneck = max(4, min(8, input_dim // 2))
+        h1 = max(bottleneck + 2, int(round(input_dim * 0.75)))
+        h2 = max(bottleneck + 1, int(round(input_dim * 0.5)))
+        hidden = [h1, h2, bottleneck, h2, h1]
+
+    layers = [tf.keras.layers.Input(shape=(input_dim,))]
+    for units in hidden[:-1]:
+        layers.append(tf.keras.layers.Dense(units, activation='relu'))
+    layers.append(tf.keras.layers.Dense(hidden[-1], activation='relu'))
+    layers.append(tf.keras.layers.Dense(input_dim, activation='sigmoid'))
+    return tf.keras.Sequential(layers)
+
+
+def _extract_weights_from_keras_archive(model_path: str) -> str:
+    tmpdir = tempfile.mkdtemp(prefix='keras_extract_')
+    with zipfile.ZipFile(model_path, 'r') as zf:
+        names = set(zf.namelist())
+        if 'model.weights.h5' not in names:
+            raise RuntimeError('File .keras không chứa model.weights.h5; artefact có thể bị lỗi hoặc không đầy đủ.')
+        zf.extract('model.weights.h5', path=tmpdir)
+    return str(Path(tmpdir) / 'model.weights.h5')
+
+
 @st.cache_resource(show_spinner=False)
-def load_keras_model(model_path: str):
-    return tf.keras.models.load_model(model_path)
+def load_keras_model(model_path: str, kind: str, dataset_name: str, input_dim: int):
+    errors = []
+    try:
+        return tf.keras.models.load_model(model_path, compile=False, safe_mode=False)
+    except Exception as e:
+        errors.append(f'load_model thất bại: {e}')
+
+    try:
+        weights_path = _extract_weights_from_keras_archive(model_path)
+        if kind == 'classifier':
+            model = build_classifier_fallback(input_dim)
+        else:
+            model = build_dae_fallback(dataset_name, input_dim)
+        model.load_weights(weights_path)
+        return model
+    except Exception as e:
+        errors.append(f'fallback extract+load_weights thất bại: {e}')
+
+    raise RuntimeError(
+        'Không load được model Keras. Nguyên nhân thường là artefact .keras bị lệch phiên bản hoặc lưu chưa đầy đủ.\n'
+        + '\n'.join('- ' + msg for msg in errors)
+    )
 
 
 @st.cache_data(show_spinner=False)
@@ -267,7 +333,7 @@ with st.sidebar:
     sample_index = st.number_input('Chỉ số mẫu', min_value=0, value=0, step=1)
     artifact_root_str = st.text_input(
         'Artifact root',
-        value='artifacts',
+        value='artifacts_rewrite',
         help='Trỏ tới thư mục chứa NSL-KDD/UNSW-NB15/CICIDS2017 và các thư mục 02_preprocessing, 04_classifier, 05_adversarial, 06_dae',
     )
     uploaded_ae = None
@@ -299,8 +365,6 @@ if run:
         if missing:
             raise FileNotFoundError('Thiếu artefact bắt buộc:\n- ' + '\n- '.join(missing))
 
-        classifier = load_keras_model(str(art['classifier_path']))
-        dae = load_keras_model(str(art['dae_path']))
         threshold_meta = load_json(str(art['threshold_path']))
         groups = load_json(str(art['group_path']))
         manifest = load_json(str(art['manifest_path']))
@@ -308,6 +372,9 @@ if run:
         nf_idx = select_nf_indices(selected_feature_names, groups)
         threshold = float(threshold_meta['threshold'])
         threshold_metric = threshold_meta.get('threshold_metric', 'paper_l2')
+
+        classifier = load_keras_model(str(art['classifier_path']), 'classifier', dataset_name, len(selected_feature_names))
+        dae = load_keras_model(str(art['dae_path']), 'dae', dataset_name, len(nf_idx))
 
         if mode == 'Dùng thư mục artifacts':
             ae_path, ae_all, x, real_index = get_sample_from_artifacts(art['adv_dir'], attack_name, int(sample_index))
@@ -382,7 +449,7 @@ if run:
 st.divider()
 with st.expander('Cấu trúc thư mục mong đợi'):
     st.code(
-        '''artifacts/
+        '''artifacts_rewrite/
 ├── NSL-KDD/
 │   ├── 02_preprocessing/
 │   │   └── preprocessing_manifest.json
