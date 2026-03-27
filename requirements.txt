@@ -3,5 +3,4 @@ tensorflow-cpu==2.15.0
 numpy==1.26.4
 pandas==2.2.2
 h5py==3.10.0
-protobuf==4.25.3
-ml-dtypes==0.2.0
+packaging>=23,<25
